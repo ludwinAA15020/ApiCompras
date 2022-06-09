@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Compras.Controllers
 {
@@ -21,13 +22,53 @@ namespace Compras.Controllers
         }
 
         // GET: api/<ProductoController>
+        //[HttpGet]
+        //public async Task<IActionResult> GetProducto()
+        //{
+        //    try
+        //    {
+        //        var listProductos = await _context.Productos.ToListAsync();
+        //        return Ok(listProductos);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+
         [HttpGet]
         public async Task<IActionResult> GetProducto()
         {
             try
             {
-                var listProductos = await _context.Productos.ToListAsync();
-                return Ok(listProductos);
+                //    var listusuario = await _context.Usuarios.ToListAsync();
+                // var lis= _context.Usuarios.Where(x => x.UserId == id).FirstOrDefaultAsync();
+
+
+                List<ProductoDTo> lista = await (from Producto in _context.Productos
+                                             join Categorium in _context.Categoria
+                                             on Producto.Idcategoria equals Categorium.Idcategoria
+                                             select new ProductoDTo
+                                             {
+                                                 Idproducto = Producto.Idproducto,
+                                                 Idcategoria = Categorium.Idcategoria,
+                                                 Nombreprod = Producto.Nombreprod,
+                                                 Precioprod = Producto.Precioprod,
+                                                 Marcaprod = Producto.Marcaprod,
+                                                 Medidasprod = Producto.Medidasprod,
+                                                 Utilidadprod = Producto.Utilidadprod,
+                                                 Descripcionprod = Producto.Descripcionprod,
+                                                 Garantiaprod = Producto.Garantiaprod,
+                                                 Imagenprod = Producto.Imagenprod,
+                                                 categoriaNombre =Categorium.Nombrecategoria,                                                
+                                             }).ToListAsync();
+
+
+
+
+
+                return Ok(lista);
             }
             catch (Exception ex)
             {
@@ -35,12 +76,6 @@ namespace Compras.Controllers
             }
         }
 
-        // GET api/<ProductoController>/5
-        [HttpGet("{id}")]
-        public string getproducto(int id)
-        {
-            return "value";
-        }
 
 
         [HttpGet]

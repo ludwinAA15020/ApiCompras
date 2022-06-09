@@ -35,12 +35,7 @@ namespace Compras.Controllers
             }
         }
 
-        // GET api/<ProductoController>/5
-        [HttpGet("{id}")]
-        public string getproducto(int id)
-        {
-            return "value";
-        }
+       
 
         [HttpGet]
         [Route("{Id}")]
